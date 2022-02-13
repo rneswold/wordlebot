@@ -335,12 +335,12 @@ impl Words {
     // method.
 
     pub fn remove(self, words: &Words) -> Words {
-        Words(
-            self.0
-                .intersection(&words.0)
-                .cloned()
-                .collect::<HashSet<&'static str>>(),
-        )
+	let updated = self.0
+            .intersection(&words.0)
+            .cloned()
+            .collect::<HashSet<&'static str>>();
+
+        Words(updated)
     }
 }
 
