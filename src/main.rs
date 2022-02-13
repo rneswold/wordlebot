@@ -20,8 +20,7 @@ fn get_feedback() -> io::Result<String> {
 
         if input
             .matches(|c| c == 'B' || c == 'Y' || c == 'G')
-            .collect::<Vec<&str>>()
-            .len()
+            .count()
             < 5
         {
             println!("ERROR: only letters in result are B, Y, and G");
