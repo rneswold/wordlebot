@@ -42,24 +42,21 @@ fn get_hints() -> io::Result<String> {
 // Use the clues to reduce the vocabulary.
 
 fn process_hints(
-    vocab: dictionary::Words, gt: &dictionary::GreenTable, guess: &str,
+    mut vocab: dictionary::Words, gt: &dictionary::GreenTable, guess: &str,
     hints: &str,
 ) -> dictionary::Words {
-    hints
-        .char_indices()
-	.zip(guess.chars())
-	.filter(|((_, ch), _)| *ch != 'B')
-	.fold(vocab, |acc, ((idx, hint), ch)| {
-	    if let Some(words) = gt.get(&(idx, ch)) {
-		if hint == 'G' {
-		    acc.preserve(words)
-		} else {
-		    acc.remove(words)
-		}
-	    } else {
-		acc
-	    }
-	})
+    for ((idx, hint), ch) in hints.char_indices().zip(guess.chars()) {
+        if hint != 'B' {
+            if let Some(words) = gt.get(&(idx, ch)) {
+                if hint == 'G' {
+                    vocab.preserve(words)
+                } else {
+                    vocab.remove(words)
+                }
+            }
+        }
+    }
+    vocab
 }
 
 // Preps the hint tables and the initial vocabulary. Then it enters

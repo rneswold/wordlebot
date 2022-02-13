@@ -320,45 +320,36 @@ impl Words {
     pub fn pick_random(&self) -> &'static str {
         let choice = rand::random::<usize>() % self.0.len();
 
-        self
-            .0
+        self.0
             .iter()
             .enumerate()
             .skip_while(|(idx, _)| *idx < choice)
             .next()
             .unwrap()
-	    .1
+            .1
     }
 
     // Consumes the set of words and returns a possibly smaller set of
     // words. The returned set contains words that were in both sets.
-    // Having the method consume the set allows this method to be used
-    // in an iterator's `.fold()` method.
 
-    pub fn preserve(self, words: &Words) -> Words {
-        let updated = self
+    pub fn preserve(&mut self, words: &Words) {
+        self.0 = self
             .0
             .intersection(&words.0)
             .cloned()
             .collect::<HashSet<&'static str>>();
-
-        Words(updated)
     }
 
     // Consumes the set of words and returns a possibly smaller set of
     // words. The returned set doesn't have any of the words that are
-    // also in the passed set. Having the method consume the set
-    // allows this method to be used in an iterator's `.fold()`
-    // method.
+    // also in the passed set.
 
-    pub fn remove(self, words: &Words) -> Words {
-        let updated = self
+    pub fn remove(&mut self, words: &Words) {
+        self.0 = self
             .0
             .difference(&words.0)
             .cloned()
             .collect::<HashSet<&'static str>>();
-
-        Words(updated)
     }
 }
 
