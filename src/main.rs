@@ -11,7 +11,7 @@ fn get_hints() -> io::Result<String> {
 
         // Prompt the user and get the hints.
 
-        print!("  Result> ");
+        print!("   Hints> ");
         io::stdout().flush()?;
 
         io::stdin().read_line(&mut input)?;
@@ -24,14 +24,14 @@ fn get_hints() -> io::Result<String> {
         // The input *must* be 5 characters.
 
         if input.len() != 5 {
-            println!("ERROR: result information must be 5 characters");
+            println!("ERROR: hints must contain 5 characters");
             continue;
         }
 
         // The input can only contain the letters B, Y, and G.
 
         if input.matches(|c| c == 'B' || c == 'Y' || c == 'G').count() < 5 {
-            println!("ERROR: only letters in result are B, Y, and G");
+            println!("ERROR: only letters in hints are B, Y, and G");
             continue;
         }
 
@@ -41,11 +41,11 @@ fn get_hints() -> io::Result<String> {
 
 // Use the clues to reduce the vocabulary.
 
-fn process_result(
+fn process_hints(
     vocab: dictionary::Words, gt: &dictionary::GreenTable, guess: &str,
-    result: &str,
+    hints: &str,
 ) -> dictionary::Words {
-    let tmp = result
+    let tmp = hints
         .char_indices()
         .filter_map(|(idx, ch)| {
             if ch == 'G' {
@@ -58,7 +58,7 @@ fn process_result(
         })
         .fold(vocab, dictionary::Words::preserve);
 
-    result
+    hints
         .char_indices()
         .filter_map(|(idx, ch)| {
             if ch == 'Y' {
@@ -107,7 +107,7 @@ fn main() -> io::Result<()> {
 
         // Reduce the vocabulary by applying the hints.
 
-        vocab = process_result(vocab, &grn_tbl, guess, &input)
+        vocab = process_hints(vocab, &grn_tbl, guess, &input)
     }
     Ok(())
 }
