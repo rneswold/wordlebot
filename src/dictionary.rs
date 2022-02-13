@@ -1,4 +1,3 @@
-use rand;
 use std::collections::{HashMap, HashSet};
 
 const WORDS: &[&str] = &[
