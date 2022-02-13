@@ -69,7 +69,7 @@ fn main() -> io::Result<()> {
             break;
         }
 
-        vocab = process_result(vocab, &grn_tbl, &guess, &input)
+        vocab = process_result(vocab, &grn_tbl, guess, &input)
     }
     Ok(())
 }
