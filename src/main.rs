@@ -45,7 +45,7 @@ fn process_result(
     vocab: dictionary::Words, gt: &dictionary::GreenTable, guess: &str,
     result: &str,
 ) -> dictionary::Words {
-    result
+    let tmp = result
         .char_indices()
         .filter_map(|(idx, ch)| {
             if ch == 'G' {
@@ -56,7 +56,20 @@ fn process_result(
                 None
             }
         })
-        .fold(vocab, dictionary::Words::remove)
+        .fold(vocab, dictionary::Words::preserve);
+
+    result
+        .char_indices()
+        .filter_map(|(idx, ch)| {
+            if ch == 'Y' {
+                let guess_ch = guess.chars().nth(idx).unwrap();
+
+                gt.get(&(idx, guess_ch))
+            } else {
+                None
+            }
+        })
+        .fold(tmp, dictionary::Words::remove)
 }
 
 // Preps the hint tables and the initial vocabulary. Then it enters

@@ -12,7 +12,7 @@ NOTE: If you give an incorrect clue, you'll have to start over because
 
 - [ ] Make `webster` use all three forms of clues
   - [X] Handle GREEN hints
-  - [ ] Handle YELLOW hints
+  - [X] Handle YELLOW hints
   - [ ] Handle BLACK hints
 - [ ] When `webster` correctly guesses, emit the colored-box output
   that Wordle uses to show your friends how you did, without giving
@@ -22,8 +22,8 @@ NOTE: If you give an incorrect clue, you'll have to start over because
 
 ## Progress
 
-As of this commit, `webster` only uses green hints. It can take awhile
-to solve the puzzle because it only makes progress when the word it
+For this run, `webster` only used green hints. It can take awhile to
+solve the puzzle because it only makes progress when the word it
 chooses generates green hints. But even this can cause surprising
 results. For this run, the word to solve was CAMEL. Here's how one
 session went:
@@ -62,4 +62,21 @@ QUIRK was a terrible, first guess. We should probably make the first
 guess one of the several words that have been deemed "good, initial
 guesses".
 
-As more hints are used, we'll re-run it using this word.
+For this next run, support for yellow hints was added. It fared better
+but really could use the information that black hints provide.
+
+```
+My guess: REGAL (vocabulary: 2315 words)
+  Result> bybyg
+My guess: CHILL (vocabulary: 95 words)
+  Result> gbbbg
+My guess: CAROL (vocabulary: 7 words)
+  Result> ggbbg
+My guess: CAVIL (vocabulary: 3 words)
+  Result> ggbbg
+My guess: CAVIL (vocabulary: 3 words)
+  Result> ggbbg
+My guess: CAMEL (vocabulary: 3 words)
+  Result> ggggg
+Solved it! The word was "CAMEL"
+```
