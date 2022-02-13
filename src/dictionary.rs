@@ -1,5 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
+// List of words used by Wordle. This list was obtained from the
+// wordle-tui project.
+
 const WORDS: &[&str] = &[
     "cigar", "rebut", "sissy", "humph", "awake", "blush", "focal", "evade",
     "naval", "serve", "heath", "dwarf", "model", "karma", "stink", "grade",
@@ -293,16 +296,26 @@ const WORDS: &[&str] = &[
     "artsy", "rural", "shave",
 ];
 
+// Words is a set containing words (which are, in turn, &'static str
+// values.) This type defines operations that one would like to do
+// with a set of words.
+
 pub struct Words(HashSet<&'static str>);
 
 impl Words {
+    // Create an empty set of words.
+
     pub fn new() -> Words {
         Words(HashSet::new())
     }
 
+    // Returns the number of words in the set.
+
     pub fn total(&self) -> usize {
         self.0.len()
     }
+
+    // Picks a random word from the set.
 
     pub fn pick_random(&self) -> &'static str {
         let choice = rand::random::<usize>() % self.0.len();
@@ -315,6 +328,12 @@ impl Words {
         unreachable!()
     }
 
+    // Consumes the set of words and returns a possibly smaller set of
+    // words. The returned set doesn't have any of the words that are
+    // also in the passed set. Having the method consume the set
+    // allows this method to be used in an iterator's `.fold()`
+    // method.
+
     pub fn remove(self, words: &Words) -> Words {
         Words(
             self.0
@@ -325,10 +344,22 @@ impl Words {
     }
 }
 
+// Defines the ket type used in the GreenTable.
+
 pub type GreenKey = (usize, char);
+
+// Holds information that is useful when handling green hints. The key
+// is a pair containing the character along with its position in the
+// word. The value is a set of all words that have the character in
+// the position.
+
 pub struct GreenTable(HashMap<GreenKey, Words>);
 
 impl GreenTable {
+
+    // Returns a new table, pre-stuffed with all the words in `WORDS`
+    // properly inserted.
+
     pub fn new() -> GreenTable {
         let mut tbl: HashMap<GreenKey, Words> = HashMap::new();
 
@@ -347,10 +378,15 @@ impl GreenTable {
         GreenTable(tbl)
     }
 
+    // Performs a look-up in the table.
+
     pub fn get(&self, key: &GreenKey) -> Option<&Words> {
         self.0.get(key)
     }
 }
+
+// Returns a set containing all the words in `WORDS`. This is
+// `webster`'s initial vocabulary.
 
 pub fn get_vocabulary() -> Words {
     let mut vocab: HashSet<&'static str> = HashSet::new();
