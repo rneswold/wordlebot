@@ -335,7 +335,8 @@ impl Words {
     // method.
 
     pub fn remove(self, words: &Words) -> Words {
-	let updated = self.0
+        let updated = self
+            .0
             .intersection(&words.0)
             .cloned()
             .collect::<HashSet<&'static str>>();
@@ -356,7 +357,6 @@ pub type GreenKey = (usize, char);
 pub struct GreenTable(HashMap<GreenKey, Words>);
 
 impl GreenTable {
-
     // Returns a new table, pre-stuffed with all the words in `WORDS`
     // properly inserted.
 
