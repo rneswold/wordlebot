@@ -8,6 +8,14 @@ provides guesses, you need to give the clues.
 NOTE: If you give an incorrect clue, you'll have to start over because
 `webster`'s game state will have been permanently "damaged".
 
+## Running
+
+After cloning the project, run it with
+
+```
+$ cargo run
+```
+
 ## To-do items
 
 - [ ] Make `webster` use all three forms of clues
@@ -17,7 +25,7 @@ NOTE: If you give an incorrect clue, you'll have to start over because
 - [ ] When `webster` correctly guesses, emit the colored-box output
   that Wordle uses to show your friends how you did, without giving
   away any part of the puzzle.
-- [ ] If it's too hard to give perfect clues, `webster` can performs
+- [ ] If it's too hard to give perfect clues, `webster` can perform
   both roles: guessing and generating the clues.
 
 ## Progress
