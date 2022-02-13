@@ -45,31 +45,21 @@ fn process_hints(
     vocab: dictionary::Words, gt: &dictionary::GreenTable, guess: &str,
     hints: &str,
 ) -> dictionary::Words {
-    let tmp = hints
-        .char_indices()
-        .filter_map(|(idx, ch)| {
-            if ch == 'G' {
-                let guess_ch = guess.chars().nth(idx).unwrap();
-
-                gt.get(&(idx, guess_ch))
-            } else {
-                None
-            }
-        })
-        .fold(vocab, dictionary::Words::preserve);
-
     hints
         .char_indices()
-        .filter_map(|(idx, ch)| {
-            if ch == 'Y' {
-                let guess_ch = guess.chars().nth(idx).unwrap();
-
-                gt.get(&(idx, guess_ch))
-            } else {
-                None
-            }
-        })
-        .fold(tmp, dictionary::Words::remove)
+	.zip(guess.chars())
+	.filter(|((_, ch), _)| *ch != 'B')
+	.fold(vocab, |acc, ((idx, hint), ch)| {
+	    if let Some(words) = gt.get(&(idx, ch)) {
+		if hint == 'G' {
+		    acc.preserve(words)
+		} else {
+		    acc.remove(words)
+		}
+	    } else {
+		acc
+	    }
+	})
 }
 
 // Preps the hint tables and the initial vocabulary. Then it enters
