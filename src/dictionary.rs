@@ -305,7 +305,7 @@ pub struct Words(HashSet<&'static str>);
 impl Words {
     // Create an empty set of words.
 
-    pub fn new() -> Words {
+    fn new() -> Words {
         Words(HashSet::new())
     }
 
