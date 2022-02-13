@@ -11,7 +11,7 @@ NOTE: If you give an incorrect clue, you'll have to start over because
 ## To-do items
 
 - [ ] Make `webster` use all three forms of clues
-  - [ ] Handle GREEN hints
+  - [X] Handle GREEN hints
   - [ ] Handle YELLOW hints
   - [ ] Handle BLACK hints
 - [ ] When `webster` correctly guesses, emit the colored-box output
