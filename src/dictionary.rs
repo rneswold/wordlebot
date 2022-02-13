@@ -319,13 +319,15 @@ impl Words {
 
     pub fn pick_random(&self) -> &'static str {
         let choice = rand::random::<usize>() % self.0.len();
+        let (_, word) = self
+            .0
+            .iter()
+            .enumerate()
+            .skip_while(|(idx, _)| *idx < choice)
+            .next()
+            .unwrap();
 
-        for (idx, word) in self.0.iter().enumerate() {
-            if idx == choice {
-                return word;
-            }
-        }
-        unreachable!()
+        word
     }
 
     // Consumes the set of words and returns a possibly smaller set of
