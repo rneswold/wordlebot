@@ -242,9 +242,17 @@ fn main() -> io::Result<()> {
     let grn_tbl = dictionary::GreenTable::new();
     let frq_tbl = dictionary::CharFreqTable::new();
 
-    let mut guess = "irate";
-
     loop {
+        if vocab.total() == 0 {
+            println!("I'm out of words. Did you make a mistake with a clue?");
+            break;
+        }
+
+        // Pick a random word from the vocabulary. This will be the
+        // guess for this iteration of the loop.
+
+        let guess = vocab.pick_word();
+
         if vocab.total() < 20 {
             println!(
                 "(vocab: {:?})\nMy guess: {}",
@@ -276,17 +284,7 @@ fn main() -> io::Result<()> {
 
         // Reduce the vocabulary by applying the hints.
 
-        vocab = process_hints(vocab, &grn_tbl, &frq_tbl, guess, &hints);
-
-        if vocab.total() == 0 {
-            println!("I'm out of words. Did you make a mistake with a clue?");
-            break;
-        }
-
-        // Pick a random word from the vocabulary. This will be the
-        // guess for this iteration of the loop.
-
-        guess = vocab.pick_word()
+        vocab = process_hints(vocab, &grn_tbl, &frq_tbl, guess, &hints)
     }
     Ok(())
 }
