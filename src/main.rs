@@ -105,7 +105,7 @@ fn get_hints() -> io::Result<String> {
 
 fn process_position_hints(
     vocab: &mut dictionary::Words, gt: &dictionary::GreenTable, guess: &str,
-    hints: &Vec<Hint>,
+    hints: &[Hint],
 ) {
     // Turn the guess and hints into a (idx, hint, guess char)
     // iterator.
@@ -162,9 +162,7 @@ fn process_position_hints(
     }
 }
 
-fn bld_freq_info_table(
-    hints: &Vec<Hint>, guess: &str,
-) -> HashMap<char, FreqInfo> {
+fn bld_freq_info_table(hints: &[Hint], guess: &str) -> HashMap<char, FreqInfo> {
     let mut freq = HashMap::<char, FreqInfo>::new();
 
     // Build the table of char -> freq info.
@@ -205,7 +203,7 @@ fn bld_freq_info_table(
 
 fn process_hints(
     mut vocab: dictionary::Words, gt: &dictionary::GreenTable,
-    ft: &dictionary::CharFreqTable, guess: &str, hints: &Vec<Hint>,
+    ft: &dictionary::CharFreqTable, guess: &str, hints: &[Hint],
 ) -> dictionary::Words {
     process_position_hints(&mut vocab, gt, guess, hints);
 
@@ -280,7 +278,8 @@ fn main() -> io::Result<()> {
 
         // Convert the hint string into an array of Hint types.
 
-        let hints = input.chars().map(|c| Hint::try_from(c).unwrap()).collect();
+        let hints: Vec<Hint> =
+            input.chars().map(|c| Hint::try_from(c).unwrap()).collect();
 
         // Reduce the vocabulary by applying the hints.
 

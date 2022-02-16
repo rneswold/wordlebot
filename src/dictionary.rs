@@ -1679,26 +1679,24 @@ impl Words {
                     .count()
                     == 5
             })
-	    .cloned()
+            .cloned()
             .collect();
 
-        if best.len() > 0 {
-            let choice = rand::random::<usize>() % best.len();
-
-            best.iter()
-                .enumerate()
-                .skip_while(|(idx, _)| *idx < choice)
-                .next()
-                .unwrap()
-                .1
-        } else {
+	if best.is_empty() {
             let choice = rand::random::<usize>() % self.0.len();
 
             self.0
                 .iter()
                 .enumerate()
-                .skip_while(|(idx, _)| *idx < choice)
-                .next()
+		.find(|(idx, _)| *idx == choice)
+                .unwrap()
+                .1
+	} else {
+            let choice = rand::random::<usize>() % best.len();
+
+            best.iter()
+                .enumerate()
+		.find(|(idx, _)| *idx == choice)
                 .unwrap()
                 .1
         }
