@@ -18,10 +18,10 @@ $ cargo run
 
 ## To-do items
 
-- [ ] Make `webster` use all three forms of clues
+- [X] Make `webster` use all three forms of clues
   - [X] Handle GREEN hints
   - [X] Handle YELLOW hints
-  - [ ] Handle BLACK hints
+  - [X] Handle BLACK hints
 - [ ] When `webster` correctly guesses, emit the colored-box output
   that Wordle uses to show your friends how you did, without giving
   away any part of the puzzle.
@@ -88,3 +88,32 @@ My guess: CAMEL (vocabulary: 3 words)
   Result> ggggg
 Solved it! The word was "CAMEL"
 ```
+
+Here's the run when the Black hints were added:
+
+```
+My guess: IRATE
+   Hints> bbyby
+My guess: GLEAN
+   Hints> byyyb
+My guess: FELLA
+   Hints> byyby
+My guess: HAZEL
+   Hints> bgbgg
+My guess: EASEL
+   Hints> bgbgg
+My guess: CAMEL
+   Hints> ggggg
+Solved it! The word was "CAMEL"
+```
+
+Despite taking 6 guesses, it didn't repeat itself and the set of
+matching words kept getting smaller and smaller (I removed that info
+from the output.) It's biggest problem not is that it can "recall"
+every word instead of the most common, like a person would do. For
+instance, a person wouldn't choose HAZEL because "Z" has a low
+probability of being used. Nor would one choose FELLA because the
+double L burns an opportunity to get a clue for another letter.
+
+So the next improvement would be to choose the "best" word from the
+remaining set.
