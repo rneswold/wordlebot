@@ -1667,8 +1667,8 @@ impl Words {
             .iter()
             .filter(|word| {
                 word.chars()
-                    .dedup()
                     .sorted()
+                    .dedup()
                     .filter(|c| {
                         *c != 'z'
                             && *c != 'q'
