@@ -109,7 +109,7 @@ Solved it! The word was "CAMEL"
 
 Despite taking 6 guesses, it didn't repeat itself and the set of
 matching words kept getting smaller and smaller (I removed that info
-from the output.) It's biggest problem not is that it can "recall"
+from the output.) It's biggest problem is that it can "recall"
 every word instead of the most common, like a person would do. For
 instance, a person wouldn't choose HAZEL because "Z" has a low
 probability of being used. Nor would one choose FELLA because the
