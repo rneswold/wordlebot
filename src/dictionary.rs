@@ -1655,18 +1655,53 @@ impl Words {
         self.0.len()
     }
 
-    // Picks a random word from the set.
+    // Tries to determine the best words to choose from from a set of
+    // words. First, a subset of the input is made consisting of the
+    // "best" candidates. From this set, a random one is chosen. If
+    // the "best" set is empty, then we choose a randon one from the
+    // original set.
 
-    pub fn pick_random(&self) -> &'static str {
-        let choice = rand::random::<usize>() % self.0.len();
-
-        self.0
+    pub fn pick_word(&self) -> &'static str {
+        let best: Set<&'static str> = self
+            .0
             .iter()
-            .enumerate()
-            .skip_while(|(idx, _)| *idx < choice)
-            .next()
-            .unwrap()
-            .1
+            .filter(|word| {
+                word.chars()
+                    .dedup()
+                    .sorted()
+                    .filter(|c| {
+                        *c != 'z'
+                            && *c != 'q'
+                            && *c != 'v'
+                            && *c != 'x'
+                            && *c != 'j'
+                    })
+                    .count()
+                    == 5
+            })
+	    .cloned()
+            .collect();
+
+        if best.len() > 0 {
+            let choice = rand::random::<usize>() % best.len();
+
+            best.iter()
+                .enumerate()
+                .skip_while(|(idx, _)| *idx < choice)
+                .next()
+                .unwrap()
+                .1
+        } else {
+            let choice = rand::random::<usize>() % self.0.len();
+
+            self.0
+                .iter()
+                .enumerate()
+                .skip_while(|(idx, _)| *idx < choice)
+                .next()
+                .unwrap()
+                .1
+        }
     }
 
     // Consumes the set of words and returns a possibly smaller set of

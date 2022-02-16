@@ -115,5 +115,19 @@ instance, a person wouldn't choose HAZEL because "Z" has a low
 probability of being used. Nor would one choose FELLA because the
 double L burns an opportunity to get a clue for another letter.
 
-So the next improvement would be to choose the "best" word from the
-remaining set.
+---
+
+A version has been committed that picks "better" words. Here's a
+session:
+
+```
+My guess: IRATE
+   Hints> bbyby
+My guess: SHEAF
+   Hints> bbyyb
+My guess: NAMED
+   Hints> bgggb
+My guess: CAMEL
+   Hints> ggggg
+Solved it! The word was "CAMEL"
+```

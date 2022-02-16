@@ -286,7 +286,7 @@ fn main() -> io::Result<()> {
         // Pick a random word from the vocabulary. This will be the
         // guess for this iteration of the loop.
 
-        guess = vocab.pick_random()
+        guess = vocab.pick_word()
     }
     Ok(())
 }
