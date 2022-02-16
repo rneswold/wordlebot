@@ -16,6 +16,28 @@ After cloning the project, run it with
 $ cargo run
 ```
 
+### Giving Clues
+
+Giving clues is mostly straightforward: Place a B in the corresponding
+position of a letter that isn't in the word. Place a Y in the spot
+where the letter is in the word, but its current position is wrong.
+Place a G in the spot where the corresponding letter is correct and in
+the right spot.
+
+It gets a little difficult when a guess uses a particular letter more
+than once. If you find yourself trying to figure out how to provide
+proper clues, follow this procedure:
+
+- Assign the Gs first
+- Any remaining instances of the letter are handled left to right.
+  Assign Ys before Bs.
+
+For instance, if the word was OTTER and the guess was TATTY, the
+second T would get the G clue. Then we go left to right with the
+remaining Ts so the first T gets the Y clue. Since OTTER doesn't have
+any more Ts, the third T gets the B clue. So the clue you would
+provide would be YBGBB.
+
 ## To-do items
 
 - [X] Make `webster` use all three forms of clues
