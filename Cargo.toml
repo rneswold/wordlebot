@@ -6,3 +6,10 @@ edition = "2021"
 [dependencies]
 rand = "0.8"
 itertools = "0.10"
+
+[profile.release]
+opt-level = 3
+debug = false
+lto = "thin"
+debug-assertions = false
+codegen-units = 1
