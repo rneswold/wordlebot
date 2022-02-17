@@ -1,14 +1,6 @@
+use crate::{Map, Set};
 use itertools::Itertools;
-use std::collections::*;
 use std::ops::Deref;
-
-// Define general names for sets and maps. I thought it might be
-// interesting, once the program is working, to test the Hash versions
-// against the BTree versions. This lets us change the types of
-// containers in this one location.
-
-type Set<T> = HashSet<T>;
-type Map<K, V> = HashMap<K, V>;
 
 // List of words used by Wordle. This list was obtained from the
 // wordle-tui project.
@@ -1682,21 +1674,21 @@ impl Words {
             .cloned()
             .collect();
 
-	if best.is_empty() {
+        if best.is_empty() {
             let choice = rand::random::<usize>() % self.0.len();
 
             self.0
                 .iter()
                 .enumerate()
-		.find(|(idx, _)| *idx == choice)
+                .find(|(idx, _)| *idx == choice)
                 .unwrap()
                 .1
-	} else {
+        } else {
             let choice = rand::random::<usize>() % best.len();
 
             best.iter()
                 .enumerate()
-		.find(|(idx, _)| *idx == choice)
+                .find(|(idx, _)| *idx == choice)
                 .unwrap()
                 .1
         }

@@ -1,5 +1,13 @@
-use std::collections::HashMap;
+use std::collections::*;
 use std::io::{self, Write};
+
+// Define general names for sets and maps. I thought it might be
+// interesting, once the program is working, to test the Hash versions
+// against the BTree versions. This lets us change the types of
+// containers in this one location.
+
+type Set<T> = BTreeSet<T>;
+type Map<K, V> = BTreeMap<K, V>;
 
 mod dictionary;
 
@@ -162,8 +170,8 @@ fn process_position_hints(
     }
 }
 
-fn bld_freq_info_table(hints: &[Hint], guess: &str) -> HashMap<char, FreqInfo> {
-    let mut freq = HashMap::<char, FreqInfo>::new();
+fn bld_freq_info_table(hints: &[Hint], guess: &str) -> Map<char, FreqInfo> {
+    let mut freq = Map::<char, FreqInfo>::new();
 
     // Build the table of char -> freq info.
 
@@ -378,7 +386,7 @@ mod test {
                 ],
                 "abcde",
             );
-            let mut expected: HashMap<char, FreqInfo> = HashMap::new();
+            let mut expected: Map<char, FreqInfo> = Map::new();
 
             expected.insert('a', FreqInfo(0, 0));
             expected.insert('b', FreqInfo(0, 0));
@@ -399,7 +407,7 @@ mod test {
                 ],
                 "abcde",
             );
-            let mut expected: HashMap<char, FreqInfo> = HashMap::new();
+            let mut expected: Map<char, FreqInfo> = Map::new();
 
             expected.insert('a', FreqInfo(1, 5));
             expected.insert('b', FreqInfo(0, 0));
@@ -420,7 +428,7 @@ mod test {
                 ],
                 "aabcd",
             );
-            let mut expected: HashMap<char, FreqInfo> = HashMap::new();
+            let mut expected: Map<char, FreqInfo> = Map::new();
 
             expected.insert('a', FreqInfo(2, 5));
             expected.insert('b', FreqInfo(0, 0));
@@ -440,7 +448,7 @@ mod test {
                 ],
                 "aaabc",
             );
-            let mut expected: HashMap<char, FreqInfo> = HashMap::new();
+            let mut expected: Map<char, FreqInfo> = Map::new();
 
             expected.insert('a', FreqInfo(2, 2));
             expected.insert('b', FreqInfo(0, 0));
@@ -459,7 +467,7 @@ mod test {
                 ],
                 "aaabc",
             );
-            let mut expected: HashMap<char, FreqInfo> = HashMap::new();
+            let mut expected: Map<char, FreqInfo> = Map::new();
 
             expected.insert('a', FreqInfo(2, 2));
             expected.insert('b', FreqInfo(1, 3));
@@ -478,7 +486,7 @@ mod test {
                 ],
                 "aacbd",
             );
-            let mut expected: HashMap<char, FreqInfo> = HashMap::new();
+            let mut expected: Map<char, FreqInfo> = Map::new();
 
             expected.insert('a', FreqInfo(2, 4));
             expected.insert('b', FreqInfo(1, 3));
