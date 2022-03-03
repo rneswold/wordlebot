@@ -1658,7 +1658,8 @@ impl Words {
             .0
             .iter()
             .filter(|word| {
-                word.chars()
+		word.find("uo") == None &&
+                    word.chars()
                     .sorted()
                     .dedup()
                     .filter(|c| {
