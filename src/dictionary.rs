@@ -1658,20 +1658,23 @@ impl Words {
             .0
             .iter()
             .filter(|word| {
-		word.find(&['a', 'e', 'i', 'o', 'u', 'y']) != None &&
-		word.find("uo") == None &&
-                    word.chars()
-                    .sorted()
-                    .dedup()
-                    .filter(|c| {
-                        *c != 'z'
-                            && *c != 'q'
-                            && *c != 'v'
-                            && *c != 'x'
-                            && *c != 'j'
-                    })
-                    .count()
-                    == 5
+                word.find(&['a', 'e', 'i', 'o', 'u', 'y']) != None
+                    && word.find("uo") == None
+                    && word.find("ln") == None
+                    && word.find("kh") == None
+                    && word
+                        .chars()
+                        .sorted()
+                        .dedup()
+                        .filter(|c| {
+                            *c != 'z'
+                                && *c != 'q'
+                                && *c != 'v'
+                                && *c != 'x'
+                                && *c != 'j'
+                        })
+                        .count()
+                        == 5
             })
             .cloned()
             .collect();
