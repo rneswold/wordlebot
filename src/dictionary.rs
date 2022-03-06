@@ -1658,6 +1658,7 @@ impl Words {
             .0
             .iter()
             .filter(|word| {
+		word.find(&['a', 'e', 'i', 'o', 'u', 'y']) != None &&
 		word.find("uo") == None &&
                     word.chars()
                     .sorted()
