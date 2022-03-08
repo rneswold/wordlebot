@@ -52,8 +52,8 @@ provide would be YBGBB.
 
 ## Progress
 
-For this run, `webster` only used green hints. It can take awhile to
-solve the puzzle because it only makes progress when the word it
+For this run, `webster` only used green hints. It can take a while
+to solve the puzzle because it only makes progress when the word it
 chooses generates green hints. But even this can cause surprising
 results. For this run, the word to solve was CAMEL. Here's how one
 session went:
