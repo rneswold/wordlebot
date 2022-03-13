@@ -1662,6 +1662,7 @@ impl Words {
                     && word.find("uo") == None
                     && word.find("ln") == None
                     && word.find("kh") == None
+                    && word.find("eu") == None
                     && word
                         .chars()
                         .sorted()
