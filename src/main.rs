@@ -296,19 +296,15 @@ fn main() -> io::Result<()> {
 
         let guess = vocab.pick_word();
 
-        if vocab.total() < 20 {
-            println!(
-                "(vocab: {:?})\nMy guess: {}",
-                vocab,
-                guess.to_uppercase()
-            );
-        } else {
-            println!(
-                "(vocabulary: {} words)\nMy guess: {}",
-                vocab.total(),
-                guess.to_uppercase()
-            );
-        }
+	if arg.verbose {
+            if vocab.total() < 20 {
+		println!("(vocab: {:?})", vocab);
+            } else {
+		println!("(vocabulary: {} words)", vocab.total());
+            }
+	}
+
+	println!("My guess: {}", guess.to_uppercase());
 
         // Get hints from the user.
 
