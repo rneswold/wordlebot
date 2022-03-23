@@ -1,5 +1,6 @@
 use std::collections::*;
 use std::io::{self, Write};
+use clap::{ArgEnum, Parser};
 
 // Define general names for sets and maps. I thought it might be
 // interesting, once the program is working, to test the Hash versions
@@ -10,6 +11,12 @@ type Set<T> = BTreeSet<T>;
 type Map<K, V> = BTreeMap<K, V>;
 
 mod dictionary;
+
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ArgEnum, Debug)]
+enum Theme {
+    Normal,
+    HighContrast
+}
 
 #[derive(PartialEq, Clone, Debug)]
 enum Hint {
@@ -29,6 +36,17 @@ impl TryFrom<char> for Hint {
             _ => Err(()),
         }
     }
+}
+
+#[derive(Parser, Debug)]
+#[clap(name = "Webster")]
+#[clap(version)]
+#[clap(about = "Guesses a word by using Wordle (tm) clues", long_about = None)]
+struct Args {
+    #[clap(short, long, arg_enum, default_value_t = Theme::Normal)]
+    theme: Theme,
+    #[clap(short, long)]
+    verbose: bool,
 }
 
 // Holds character frequency information. This type is meant to be fed
