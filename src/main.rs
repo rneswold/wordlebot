@@ -25,6 +25,18 @@ enum Hint {
     Green,
 }
 
+impl Hint {
+    pub fn to_char(&self, theme: &Theme) -> char {
+	match (self, theme) {
+	    (Hint::Black, _) => '⬛',
+	    (Hint::Yellow, Theme::Normal) => '🟨',
+	    (Hint::Green, Theme::Normal) => '🟩',
+	    (Hint::Yellow, Theme::HighContrast) => '🟦',
+	    (Hint::Green, Theme::HighContrast) => '🟧',
+	}
+    }
+}
+
 impl TryFrom<char> for Hint {
     type Error = ();
 
@@ -255,16 +267,23 @@ fn process_hints(
     vocab
 }
 
+fn to_lossy_string(guess: &[Hint], theme: &Theme) -> String {
+    guess.iter().map(|e| e.to_char(theme)).collect::<String>()
+}
+
 // Preps the hint tables and the initial vocabulary. Then it enters
 // the main loop of the program where it picks a random word from its
 // vocabulary, waits for clues, then applies them to its vocabulary.
 
 fn main() -> io::Result<()> {
+    let arg = Args::parse();
+
     // Prep the hint tables and start with the full vocabulary.
 
     let mut vocab = dictionary::get_vocabulary();
     let grn_tbl = dictionary::GreenTable::new();
     let frq_tbl = dictionary::CharFreqTable::new();
+    let mut progress: Vec<[Hint; 5]> = Vec::with_capacity(6);
 
     loop {
         if vocab.total() == 0 {
@@ -295,17 +314,22 @@ fn main() -> io::Result<()> {
 
         let input = get_hints()?;
 
-        // If it's GGGGG, then the guess was correct.
-
-        if input == "GGGGG" {
-            println!("Solved it! The word was \"{}\"", guess.to_uppercase());
-            break;
-        }
-
         // Convert the hint string into an array of Hint types.
 
         let hints: Vec<Hint> =
             input.chars().map(|c| Hint::try_from(c).unwrap()).collect();
+
+	progress.push(hints.clone().try_into().unwrap());
+
+        // If every clue is green, the guess matches the secret word.
+
+        if hints.iter().all(|e| *e == Hint::Green) {
+	    println!("WordleBot ??? {}/6\n", progress.len());
+	    for ii in progress.iter() {
+		println!("{}", to_lossy_string(ii, &arg.theme));
+	    }
+            break;
+        }
 
         // Reduce the vocabulary by applying the hints.
 

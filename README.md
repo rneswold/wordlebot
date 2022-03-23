@@ -44,7 +44,7 @@ provide would be YBGBB.
   - [X] Handle GREEN hints
   - [X] Handle YELLOW hints
   - [X] Handle BLACK hints
-- [ ] When `webster` correctly guesses, emit the colored-box output
+- [X] When `webster` correctly guesses, emit the colored-box output
   that Wordle uses to show your friends how you did, without giving
   away any part of the puzzle.
 - [ ] If it's too hard to give perfect clues, `webster` can perform
