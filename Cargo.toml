@@ -1,7 +1,7 @@
 [package]
-name = "webster"
+name = "wordlebot"
+version = "1.0.1"
 authors = ["Rich Neswold <rich.neswold@gmail.com>"]
-version = "1.0.0"
 edition = "2021"
 
 [dependencies]

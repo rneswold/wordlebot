@@ -1,12 +1,12 @@
-# `webster`
+# `wordlebot`
 
 An application that tries to solve a Wordle puzzle only by using
 clues. You decide the word to discover (if you want to compete with
-`webster`, use the word you already solved for the day.) As `webster`
-provides guesses, you need to give the clues.
+`wordlebot`, use the word you already solved for the day.) As
+`wordlebot` provides guesses, you need to give the clues.
 
 NOTE: If you give an incorrect clue, you'll have to start over because
-`webster`'s game state will have been permanently "damaged".
+`wordlebot`'s game state will have been permanently "damaged".
 
 ## Running
 
@@ -40,19 +40,19 @@ provide would be YBGBB.
 
 ## To-do items
 
-- [X] Make `webster` use all three forms of clues
+- [X] Make `wordlebot` use all three forms of clues
   - [X] Handle GREEN hints
   - [X] Handle YELLOW hints
   - [X] Handle BLACK hints
-- [X] When `webster` correctly guesses, emit the colored-box output
+- [X] When `wordlebot` correctly guesses, emit the colored-box output
   that Wordle uses to show your friends how you did, without giving
   away any part of the puzzle.
-- [ ] If it's too hard to give perfect clues, `webster` can perform
+- [ ] If it's too hard to give perfect clues, `wordlebot` can perform
   both roles: guessing and generating the clues.
 
 ## Progress
 
-For this run, `webster` only used green hints. It can take a while
+For this run, `wordlebot` only used green hints. It can take a while
 to solve the puzzle because it only makes progress when the word it
 chooses generates green hints. But even this can cause surprising
 results. For this run, the word to solve was CAMEL. Here's how one
