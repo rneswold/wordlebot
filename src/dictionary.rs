@@ -1937,7 +1937,7 @@ mod tests {
         const ANSWER: &str = "infer";
         let mut words = Words::new(&[
             ANSWER, "crwth", "fluor", "pizza", "quiet", "exact", "jelly",
-            "petty", "swoln", "rikha"
+            "petty", "swoln", "rikha",
         ]);
 
         assert_eq!(words.pick_word(), ANSWER);

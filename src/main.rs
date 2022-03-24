@@ -1,6 +1,6 @@
+use clap::{ArgEnum, Parser};
 use std::collections::*;
 use std::io::{self, Write};
-use clap::{ArgEnum, Parser};
 
 // Define general names for sets and maps. I thought it might be
 // interesting, once the program is working, to test the Hash versions
@@ -15,7 +15,7 @@ mod dictionary;
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ArgEnum, Debug)]
 enum Theme {
     Normal,
-    HighContrast
+    HighContrast,
 }
 
 #[derive(PartialEq, Clone, Debug)]
@@ -27,13 +27,13 @@ enum Hint {
 
 impl Hint {
     pub fn to_char(&self, theme: &Theme) -> char {
-	match (self, theme) {
-	    (Hint::Black, _) => '⬛',
-	    (Hint::Yellow, Theme::Normal) => '🟨',
-	    (Hint::Green, Theme::Normal) => '🟩',
-	    (Hint::Yellow, Theme::HighContrast) => '🟦',
-	    (Hint::Green, Theme::HighContrast) => '🟧',
-	}
+        match (self, theme) {
+            (Hint::Black, _) => '⬛',
+            (Hint::Yellow, Theme::Normal) => '🟨',
+            (Hint::Green, Theme::Normal) => '🟩',
+            (Hint::Yellow, Theme::HighContrast) => '🟦',
+            (Hint::Green, Theme::HighContrast) => '🟧',
+        }
     }
 }
 
@@ -53,11 +53,17 @@ impl TryFrom<char> for Hint {
 #[derive(Parser, Debug)]
 #[clap(name = "Webster")]
 #[clap(version)]
-#[clap(about = "Guesses a word by using Wordle (tm) clues", long_about = None)]
+#[clap(about = "Guesses a word by using Wordle clues", long_about = None)]
 struct Args {
-    #[clap(short, long, arg_enum, default_value_t = Theme::Normal)]
+    #[clap(short, long, arg_enum, default_value_t = Theme::Normal, help = "Choose a theme", long_help = "Once the word is guessed, it displays a summary of the guesses just like the official app. This option allows you to change the color of the blocks.")]
     theme: Theme,
-    #[clap(short, long)]
+
+    #[clap(
+        short,
+        long,
+        help = "Report vocabulary before each guess",
+        long_help = "With this option, the program reports how many words are left in its vocabulary, after applying all the clues. When the number of words drops below a limit, all the remaining words are printed."
+    )]
     verbose: bool,
 }
 
@@ -296,15 +302,15 @@ fn main() -> io::Result<()> {
 
         let guess = vocab.pick_word();
 
-	if arg.verbose {
+        if arg.verbose {
             if vocab.total() < 20 {
-		println!("(vocab: {:?})", vocab);
+                println!("(vocab: {:?})", vocab);
             } else {
-		println!("(vocabulary: {} words)", vocab.total());
+                println!("(vocabulary: {} words)", vocab.total());
             }
-	}
+        }
 
-	println!("My guess: {}", guess.to_uppercase());
+        println!("My guess: {}", guess.to_uppercase());
 
         // Get hints from the user.
 
@@ -315,15 +321,15 @@ fn main() -> io::Result<()> {
         let hints: Vec<Hint> =
             input.chars().map(|c| Hint::try_from(c).unwrap()).collect();
 
-	progress.push(hints.clone().try_into().unwrap());
+        progress.push(hints.clone().try_into().unwrap());
 
         // If every clue is green, the guess matches the secret word.
 
         if hints.iter().all(|e| *e == Hint::Green) {
-	    println!("WordleBot ??? {}/6\n", progress.len());
-	    for ii in progress.iter() {
-		println!("{}", to_lossy_string(ii, &arg.theme));
-	    }
+            println!("WordleBot ??? {}/6\n", progress.len());
+            for ii in progress.iter() {
+                println!("{}", to_lossy_string(ii, &arg.theme));
+            }
             break;
         }
 
