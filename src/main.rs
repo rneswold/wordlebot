@@ -65,6 +65,14 @@ struct Args {
         long_help = "With this option, the program reports how many words are left in its vocabulary, after applying all the clues. When the number of words drops below a limit, all the remaining words are printed."
     )]
     verbose: bool,
+
+    #[clap(
+        long,
+        default_value_t = 20,
+        help = "Set vocabulary report limit",
+        long_help = "This sets the limit which decides whether the number of words remaining is reported instead of each word."
+    )]
+    limit: usize,
 }
 
 // Holds character frequency information. This type is meant to be fed
@@ -303,7 +311,7 @@ fn main() -> io::Result<()> {
         let guess = vocab.pick_word();
 
         if arg.verbose {
-            if vocab.total() < 20 {
+            if vocab.total() < arg.limit {
                 println!("(vocab: {:?})", vocab);
             } else {
                 println!("(vocabulary: {} words)", vocab.total());
