@@ -1836,11 +1836,6 @@ pub fn mk_green_tbl(s: &'static [&'static str]) -> GreenTable {
 }
 
 #[cfg(test)]
-pub fn mk_freq_tbl(s: &'static [&'static str]) -> CharFreqTable {
-    CharFreqTable::new_from_slice(s)
-}
-
-#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -1935,7 +1930,7 @@ mod tests {
     #[test]
     fn test_pick_words() {
         const ANSWER: &str = "infer";
-        let mut words = Words::new(&[
+        let words = Words::new(&[
             ANSWER, "crwth", "fluor", "pizza", "quiet", "exact", "jelly",
             "petty", "swoln", "rikha",
         ]);
