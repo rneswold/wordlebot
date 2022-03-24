@@ -3,6 +3,13 @@ name = "wordlebot"
 version = "1.0.1"
 authors = ["Rich Neswold <rich.neswold@gmail.com>"]
 edition = "2021"
+description = "A program which tries to solve the daily Wordle puzzle."
+readme = "README.md"
+homepage = "https://github.com/rneswold/wordlebot"
+repository = "https://github.com/rneswold/wordlebot/tree/master"
+license = "BSD-3-Clause"
+keywords = ["wordle", "puzzle"]
+categories = ["command-line-utilities", "games"]
 
 [dependencies]
 rand = "0.8"
