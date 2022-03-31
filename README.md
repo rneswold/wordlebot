@@ -1,12 +1,13 @@
 # `wordlebot`
 
-An application that tries to solve a Wordle puzzle only by using
-clues. You decide the word to discover (if you want to compete with
-`wordlebot`, use the word you already solved for the day.) As
-`wordlebot` provides guesses, you need to give the clues.
+An application that tries to solve a
+[Wordle](https://www.nytimes.com/games/wordle/index.html) puzzle only
+by using clues. You decide the word to discover (if you want to
+compete with `wordlebot`, use the word you already solved for the
+day.) As `wordlebot` provides guesses, you need to give the clues.
 
 NOTE: If you give an incorrect clue, you'll have to start over because
-`wordlebot`'s game state will have been permanently "damaged".
+`wordlebot`'s game state will have been permanently altered.
 
 ## Running
 
@@ -14,6 +15,24 @@ After cloning the project, run it with
 
 ```
 $ cargo run
+```
+
+There are command line options to enable more information or to change
+the theme.
+
+```
+Webster 1.0.1
+Guesses a word by using Wordle clues
+
+USAGE:
+    wordlebot [OPTIONS]
+
+OPTIONS:
+    -h, --help             Print help information
+        --limit <LIMIT>    Set vocabulary report limit [default: 20]
+    -t, --theme <THEME>    Choose a theme [default: normal] [possible values: normal, high-contrast]
+    -v, --verbose          Report vocabulary before each guess
+    -V, --version          Print version information
 ```
 
 ### Giving Clues
@@ -51,6 +70,11 @@ provide would be YBGBB.
   both roles: guessing and generating the clues.
 
 ## Progress
+
+This section shows the progress the program made as more clues were
+handled.
+
+### Only Green Clues
 
 For this run, `wordlebot` only used green hints. It can take a while
 to solve the puzzle because it only makes progress when the word it
@@ -92,6 +116,8 @@ QUIRK was a terrible, first guess. We should probably make the first
 guess one of the several words that have been deemed "good, initial
 guesses".
 
+### Green and Partial Yellow Clue Support
+
 For this next run, support for yellow hints was added. It fared better
 but really could use the information that black hints provide.
 
@@ -110,6 +136,8 @@ My guess: CAMEL (vocabulary: 3 words)
   Result> ggggg
 Solved it! The word was "CAMEL"
 ```
+
+### Green, Yellow, and Black Clue Support
 
 Here's the run when the Black hints were added:
 
@@ -137,7 +165,7 @@ instance, a person wouldn't choose HAZEL because "Z" has a low
 probability of being used. Nor would one choose FELLA because the
 double L burns an opportunity to get a clue for another letter.
 
----
+### All Clues and Better Word Selection
 
 A version has been committed that picks "better" words. Here's a
 session:
