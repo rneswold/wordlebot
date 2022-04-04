@@ -53,7 +53,7 @@ impl TryFrom<char> for Hint {
 #[derive(Parser, Debug)]
 #[clap(name = "Webster")]
 #[clap(version)]
-#[clap(about = "Guesses a word by using Wordle clues", long_about = None)]
+#[clap(about = "Guesses a word by using Wordle clues", long_about = None, term_width = 80)]
 struct Args {
     #[clap(short, long, arg_enum, default_value_t = Theme::Normal, help = "Choose a theme", long_help = "Once the word is guessed, it displays a summary of the guesses just like the official app. This option allows you to change the color of the blocks.")]
     theme: Theme,
