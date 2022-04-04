@@ -55,20 +55,28 @@ impl TryFrom<char> for Hint {
 #[clap(version)]
 #[clap(about = "Guesses a word by using Wordle clues", long_about = None, term_width = 80)]
 struct Args {
-    #[clap(short, long, arg_enum, default_value_t = Theme::Normal, help = "Choose a theme", long_help = "Once the word is guessed, it displays a summary of the guesses just like the official app. This option allows you to change the color of the blocks.")]
+    #[clap(
+	short,
+	long,
+	arg_enum,
+	default_value_t = Theme::Normal,
+	env = "WORDLEBOT_THEME",
+	help = "Choose a theme",
+	long_help = "Once the word is guessed, it displays a summary of the guesses just like the official app. This option allows you to change the color of the blocks.")]
     theme: Theme,
 
     #[clap(
         short,
         long,
         help = "Report vocabulary before each guess",
-        long_help = "With this option, the program reports how many words are left in its vocabulary, after applying all the clues. When the number of words drops below a limit, all the remaining words are printed."
+        long_help = "Reports how many words are left in its vocabulary, after applying all the clues. When the number of words drops below a limit, all the remaining words are printed."
     )]
     verbose: bool,
 
     #[clap(
         long,
         default_value_t = 20,
+	env = "WORDLEBOT_LIMIT",
         help = "Set vocabulary report limit",
         long_help = "This sets the limit which decides whether the number of words remaining is reported instead of each word."
     )]
