@@ -21,18 +21,39 @@ There are command line options to enable more information or to change
 the theme.
 
 ```
-Webster 1.0.1
+Webster 1.0.2
 Guesses a word by using Wordle clues
 
 USAGE:
     wordlebot [OPTIONS]
 
 OPTIONS:
-    -h, --help             Print help information
-        --limit <LIMIT>    Set vocabulary report limit [default: 20]
-    -t, --theme <THEME>    Choose a theme [default: normal] [possible values: normal, high-contrast]
-    -v, --verbose          Report vocabulary before each guess
-    -V, --version          Print version information
+    -h, --help
+            Print help information
+
+        --limit <LIMIT>
+            This sets the limit which decides whether the number of words
+            remaining is reported instead of each word.
+
+            [env: WORDLEBOT_LIMIT=]
+            [default: 20]
+
+    -t, --theme <THEME>
+            Once the word is guessed, it displays a summary of the guesses just
+            like the official app. This option allows you to change the color of
+            the blocks.
+
+            [env: WORDLEBOT_THEME=]
+            [default: normal]
+            [possible values: normal, high-contrast]
+
+    -v, --verbose
+            Reports how many words are left in its vocabulary, after applying
+            all the clues. When the number of words drops below a limit, all the
+            remaining words are printed.
+
+    -V, --version
+            Print version information
 ```
 
 ### Giving Clues
