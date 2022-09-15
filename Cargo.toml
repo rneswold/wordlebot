@@ -1,6 +1,6 @@
 [package]
 name = "wordlebot"
-version = "1.0.2"
+version = "1.0.3"
 authors = ["Rich Neswold <rich.neswold@gmail.com>"]
 edition = "2021"
 description = "A program which tries to solve the daily Wordle puzzle."

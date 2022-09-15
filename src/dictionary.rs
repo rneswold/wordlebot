@@ -1654,6 +1654,7 @@ impl Words {
     // original set.
 
     pub fn pick_word(&self) -> &'static str {
+        let remaining_words = self.0.len();
         let best: Set<&'static str> = self
             .0
             .iter()
@@ -1663,19 +1664,22 @@ impl Words {
                     && word.find("ln") == None
                     && word.find("kh") == None
                     && word.find("eu") == None
-                    && word
-                        .chars()
-                        .sorted()
-                        .dedup()
-                        .filter(|c| {
-                            *c != 'z'
-                                && *c != 'q'
-                                && *c != 'v'
-                                && *c != 'x'
-                                && *c != 'j'
-                        })
-                        .count()
-                        == 5
+                    && (
+                        remaining_words <= 100
+                            || word
+                            .chars()
+                            .sorted()
+                            .dedup()
+                            .filter(|c| {
+                                *c != 'z'
+                                    && *c != 'q'
+                                    && *c != 'v'
+                                    && *c != 'x'
+                                    && *c != 'j'
+                            })
+                            .count()
+                            == 5
+                    )
             })
             .cloned()
             .collect();
