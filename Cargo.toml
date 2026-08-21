@@ -1,6 +1,6 @@
 [package]
 name = "wordlebot"
-version = "1.0.3"
+version = "1.0.4"
 authors = ["Rich Neswold <rich.neswold@gmail.com>"]
 edition = "2021"
 description = "A program which tries to solve the daily Wordle puzzle."
@@ -22,3 +22,4 @@ debug = false
 lto = "thin"
 debug-assertions = false
 codegen-units = 1
+strip = "debuginfo"

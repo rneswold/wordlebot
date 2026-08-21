@@ -53,7 +53,10 @@ impl TryFrom<char> for Hint {
 #[derive(Parser, Debug)]
 #[clap(name = "Webster")]
 #[clap(version)]
-#[clap(about = "Guesses a word by using Wordle clues", long_about = None, term_width = 80)]
+#[clap(about = "Guesses a word by using Wordle clues", long_about = None, term_width = 78)]
+#[clap(
+    after_long_help = "Environment variables can be set to provide different defaults. The --limit argument can be set via the WORDLEBOT_LIMIT variable and the --theme argument can be set via WORDLEBOT_THEME."
+)]
 struct Args {
     #[clap(
 	short,
@@ -76,11 +79,18 @@ struct Args {
     #[clap(
         long,
         default_value_t = 20,
-	env = "WORDLEBOT_LIMIT",
+        env = "WORDLEBOT_LIMIT",
         help = "Set vocabulary report limit",
         long_help = "This sets the limit which decides whether the number of words remaining is reported instead of each word."
     )]
     limit: usize,
+
+    #[clap(
+        long,
+        help = "Provide the solution",
+        long_help = "Providing the solution lets the program compute the hints for the next guess. The guessing algorithm doesn't have access to this parameter."
+    )]
+    solution: Option<String>,
 }
 
 // Holds character frequency information. This type is meant to be fed
@@ -118,10 +128,51 @@ impl FreqInfo {
     }
 }
 
+fn generate_hints(solution: &str, guess: &str) -> String {
+    // Pass 1: Tally non-matching solution characters using a HashMap
+    let initial_counts = solution
+        .chars()
+        .zip(guess.chars())
+        .filter(|(s, g)| s != g)
+        .fold(HashMap::new(), |mut counts, (s, _)| {
+            *counts.entry(s).or_insert(0u32) += 1;
+            counts
+        });
+
+    // Pass 2: Evaluate character pairs and construct the hints String
+    solution
+        .chars()
+        .zip(guess.chars())
+        .fold(
+            (String::with_capacity(guess.len()), initial_counts),
+            |(mut hints, mut counts), (s, g)| {
+                if s == g {
+                    hints.push('G');
+                } else if let Some(count) =
+                    counts.get_mut(&g).filter(|c| **c > 0)
+                {
+                    *count -= 1;
+                    hints.push('Y');
+                } else {
+                    hints.push('B');
+                }
+                (hints, counts)
+            },
+        )
+        .0
+}
+
 // Returns hints given by the user. The loop is so the input can be
 // re-entered if the user entered something invalid.
 
-fn get_hints() -> io::Result<String> {
+fn get_hints(args: &Args, guess: &str) -> io::Result<String> {
+    if let Some(solution) = &args.solution {
+        let hint = generate_hints(&solution, guess);
+
+        println!("   Hints> {}", &hint);
+        return Ok(hint);
+    }
+
     loop {
         let mut input = String::new();
 
@@ -178,22 +229,22 @@ fn process_position_hints(
 
     // Loop through the hint/guess items and process each.
 
-    for (idx, hint, ch) in iter {
-        // This algorithm doesn't handle Black hints.
+    for item in iter {
+        match item {
+            (idx, Hint::Green, ch) => {
+                let words = gt.get(&(idx, ch)).unwrap();
 
-        if *hint != Hint::Black {
-            let words = gt.get(&(idx, ch)).unwrap();
+                // Compute the intersection of the vocabulary with the
+                // set of words having the character in the current
+                // position.
 
-            // If it was a Green hint, compute the intersection of the
-            // vocabulary with the set of words having the character
-            // in the current position.
-
-            if *hint == Hint::Green {
                 vocab.preserve(words)
-            } else {
-                // It's a Yellow hint. Build up a set of words that
-                // have the current character in every position *but*
-                // the current one.
+            }
+            (idx, Hint::Yellow, ch) => {
+                let words = gt.get(&(idx, ch)).unwrap();
+
+                // Build up a set of words that have the current
+                // character in every position *but* the current one.
 
                 let mut keep_words = dictionary::Words::new(&[]);
 
@@ -218,6 +269,7 @@ fn process_position_hints(
 
                 vocab.remove(words)
             }
+            (_, Hint::Black, _) => (),
         }
     }
 }
@@ -298,7 +350,9 @@ fn to_lossy_string(guess: &[Hint], theme: &Theme) -> String {
 // vocabulary, waits for clues, then applies them to its vocabulary.
 
 fn main() -> io::Result<()> {
-    let arg = Args::parse();
+    let mut arg = Args::parse();
+
+    arg.solution = arg.solution.map(|s| s.to_lowercase());
 
     // Prep the hint tables and start with the full vocabulary.
 
@@ -330,7 +384,7 @@ fn main() -> io::Result<()> {
 
         // Get hints from the user.
 
-        let input = get_hints()?;
+        let input = get_hints(&arg, guess)?;
 
         // Convert the hint string into an array of Hint types.
 

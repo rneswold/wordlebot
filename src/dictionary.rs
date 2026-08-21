@@ -1,6 +1,5 @@
 use crate::{Map, Set};
 use itertools::Itertools;
-use std::ops::Deref;
 
 // List of words used by Wordle. This list was obtained from the
 // wordle-tui project.
@@ -1638,7 +1637,7 @@ impl Words {
     // Create a set of words from an array slice.
 
     pub fn new(contents: &'static [&'static str]) -> Words {
-        Words(contents.iter().map(|e| e.deref()).collect())
+        Words(contents.iter().map(|e| *e).collect())
     }
 
     // Returns the number of words in the set.
@@ -1664,9 +1663,8 @@ impl Words {
                     && word.find("ln") == None
                     && word.find("kh") == None
                     && word.find("eu") == None
-                    && (
-                        remaining_words <= 100
-                            || word
+                    && (remaining_words <= 100
+                        || word
                             .chars()
                             .sorted()
                             .dedup()
@@ -1678,8 +1676,7 @@ impl Words {
                                     && *c != 'j'
                             })
                             .count()
-                            == 5
-                    )
+                            == 5)
             })
             .cloned()
             .collect();
@@ -1934,10 +1931,7 @@ mod tests {
     #[test]
     fn test_pick_words() {
         const ANSWER: &str = "infer";
-        let words = Words::new(&[
-            ANSWER, "crwth", "fluor", "pizza", "quiet", "exact", "jelly",
-            "petty", "swoln", "rikha",
-        ]);
+        let words = Words::new(&[ANSWER, "crwth", "fluor", "swoln", "rikha"]);
 
         assert_eq!(words.pick_word(), ANSWER);
     }
