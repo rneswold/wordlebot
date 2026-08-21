@@ -21,7 +21,7 @@ There are command line options to enable more information or to change
 the theme.
 
 ```
-Webster 1.0.2
+Wordlebot 1.0.4
 Guesses a word by using Wordle clues
 
 USAGE:
@@ -35,8 +35,13 @@ OPTIONS:
             This sets the limit which decides whether the number of words
             remaining is reported instead of each word.
 
-            [env: WORDLEBOT_LIMIT=]
+            [env: WORDLEBOT_LIMIT=100]
             [default: 20]
+
+        --solution <SOLUTION>
+            Prodiving the solution lets the program compute the hints for the
+            next guess. The guessing algorithm doesn't have access to this
+            parameter.
 
     -t, --theme <THEME>
             Once the word is guessed, it displays a summary of the guesses just
