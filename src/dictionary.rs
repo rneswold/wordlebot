@@ -1,6 +1,5 @@
 use crate::{Map, Set};
 use itertools::Itertools;
-use std::ops::Deref;
 
 // List of words used by Wordle. This list was obtained from the
 // wordle-tui project.
@@ -1638,7 +1637,7 @@ impl Words {
     // Create a set of words from an array slice.
 
     pub fn new(contents: &'static [&'static str]) -> Words {
-        Words(contents.iter().map(|e| e.deref()).collect())
+        Words(contents.iter().map(|e| *e).collect())
     }
 
     // Returns the number of words in the set.
