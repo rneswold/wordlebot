@@ -84,6 +84,13 @@ struct Args {
         long_help = "This sets the limit which decides whether the number of words remaining is reported instead of each word."
     )]
     limit: usize,
+
+    #[clap(
+        long,
+        help = "Provide the solution",
+        long_help = "Providing the solution lets the program compute the hints for the next guess. The guessing algorithm doesn't have access to this parameter."
+    )]
+    solution: Option<String>,
 }
 
 // Holds character frequency information. This type is meant to be fed
@@ -121,10 +128,49 @@ impl FreqInfo {
     }
 }
 
+fn generate_hints(solution: &str, guess: &str) -> String {
+    // Pass 1: Tally non-matching solution characters using a HashMap
+    let initial_counts = solution
+        .chars()
+        .zip(guess.chars())
+        .filter(|(s, g)| s != g)
+        .fold(HashMap::new(), |mut counts, (s, _)| {
+            *counts.entry(s).or_insert(0u32) += 1;
+            counts
+        });
+
+    // Pass 2: Evaluate character pairs and construct the hints String
+    solution
+        .chars()
+        .zip(guess.chars())
+        .fold(
+            (String::with_capacity(guess.len()), initial_counts),
+            |(mut hints, mut counts), (s, g)| {
+                if s == g {
+                    hints.push('G');
+                } else if let Some(count) = counts.get_mut(&g).filter(|c| **c > 0) {
+                    *count -= 1;
+                    hints.push('Y');
+                } else {
+                    hints.push('B');
+                }
+                (hints, counts)
+            },
+        )
+        .0
+}
+
 // Returns hints given by the user. The loop is so the input can be
 // re-entered if the user entered something invalid.
 
-fn get_hints() -> io::Result<String> {
+fn get_hints(args: &Args, guess: &str) -> io::Result<String> {
+    if let Some(solution) = &args.solution {
+        let hint = generate_hints(&solution, guess);
+
+        println!("   Hints> {}", &hint);
+        return Ok(hint);
+    }
+
     loop {
         let mut input = String::new();
 
@@ -302,7 +348,9 @@ fn to_lossy_string(guess: &[Hint], theme: &Theme) -> String {
 // vocabulary, waits for clues, then applies them to its vocabulary.
 
 fn main() -> io::Result<()> {
-    let arg = Args::parse();
+    let mut arg = Args::parse();
+
+    arg.solution = arg.solution.map(|s| s.to_lowercase());
 
     // Prep the hint tables and start with the full vocabulary.
 
@@ -334,7 +382,7 @@ fn main() -> io::Result<()> {
 
         // Get hints from the user.
 
-        let input = get_hints()?;
+        let input = get_hints(&arg, guess)?;
 
         // Convert the hint string into an array of Hint types.
 
