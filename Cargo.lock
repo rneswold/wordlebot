@@ -335,7 +335,7 @@ dependencies = [
 
 [[package]]
 name = "wordlebot"
-version = "1.0.3"
+version = "1.0.4"
 dependencies = [
  "clap",
  "itertools",
