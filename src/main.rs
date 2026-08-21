@@ -148,7 +148,9 @@ fn generate_hints(solution: &str, guess: &str) -> String {
             |(mut hints, mut counts), (s, g)| {
                 if s == g {
                     hints.push('G');
-                } else if let Some(count) = counts.get_mut(&g).filter(|c| **c > 0) {
+                } else if let Some(count) =
+                    counts.get_mut(&g).filter(|c| **c > 0)
+                {
                     *count -= 1;
                     hints.push('Y');
                 } else {
