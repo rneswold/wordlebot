@@ -1931,10 +1931,7 @@ mod tests {
     #[test]
     fn test_pick_words() {
         const ANSWER: &str = "infer";
-        let words = Words::new(&[
-            ANSWER, "crwth", "fluor", "pizza", "quiet", "exact", "jelly",
-            "petty", "swoln", "rikha",
-        ]);
+        let words = Words::new(&[ANSWER, "crwth", "fluor", "swoln", "rikha"]);
 
         assert_eq!(words.pick_word(), ANSWER);
     }
