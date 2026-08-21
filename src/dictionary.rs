@@ -1663,9 +1663,8 @@ impl Words {
                     && word.find("ln") == None
                     && word.find("kh") == None
                     && word.find("eu") == None
-                    && (
-                        remaining_words <= 100
-                            || word
+                    && (remaining_words <= 100
+                        || word
                             .chars()
                             .sorted()
                             .dedup()
@@ -1677,8 +1676,7 @@ impl Words {
                                     && *c != 'j'
                             })
                             .count()
-                            == 5
-                    )
+                            == 5)
             })
             .cloned()
             .collect();

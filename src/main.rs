@@ -53,7 +53,10 @@ impl TryFrom<char> for Hint {
 #[derive(Parser, Debug)]
 #[clap(name = "Webster")]
 #[clap(version)]
-#[clap(about = "Guesses a word by using Wordle clues", long_about = None, term_width = 80)]
+#[clap(about = "Guesses a word by using Wordle clues", long_about = None, term_width = 78)]
+#[clap(
+    after_long_help = "Environment variables can be set to provide different defaults. The --limit argument can be set via the WORDLEBOT_LIMIT variable and the --theme argument can be set via WORDLEBOT_THEME."
+)]
 struct Args {
     #[clap(
 	short,
@@ -76,7 +79,7 @@ struct Args {
     #[clap(
         long,
         default_value_t = 20,
-	env = "WORDLEBOT_LIMIT",
+        env = "WORDLEBOT_LIMIT",
         help = "Set vocabulary report limit",
         long_help = "This sets the limit which decides whether the number of words remaining is reported instead of each word."
     )]
@@ -178,22 +181,22 @@ fn process_position_hints(
 
     // Loop through the hint/guess items and process each.
 
-    for (idx, hint, ch) in iter {
-        // This algorithm doesn't handle Black hints.
+    for item in iter {
+        match item {
+            (idx, Hint::Green, ch) => {
+                let words = gt.get(&(idx, ch)).unwrap();
 
-        if *hint != Hint::Black {
-            let words = gt.get(&(idx, ch)).unwrap();
+                // Compute the intersection of the vocabulary with the
+                // set of words having the character in the current
+                // position.
 
-            // If it was a Green hint, compute the intersection of the
-            // vocabulary with the set of words having the character
-            // in the current position.
-
-            if *hint == Hint::Green {
                 vocab.preserve(words)
-            } else {
-                // It's a Yellow hint. Build up a set of words that
-                // have the current character in every position *but*
-                // the current one.
+            }
+            (idx, Hint::Yellow, ch) => {
+                let words = gt.get(&(idx, ch)).unwrap();
+
+                // Build up a set of words that have the current
+                // character in every position *but* the current one.
 
                 let mut keep_words = dictionary::Words::new(&[]);
 
@@ -218,6 +221,7 @@ fn process_position_hints(
 
                 vocab.remove(words)
             }
+            (_, Hint::Black, _) => (),
         }
     }
 }
